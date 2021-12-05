@@ -55,7 +55,7 @@ ArchivesSpaceService.loaded_hook do
       Log.info "Sending report: #{Time.now}"
       messenger = ASpaceMessenger.new(
         enabled: true,
-        payload: payload,
+        payload: ->(_) { JSON.generate(payload) },
         url: AppConfig[:aspace_reporter_secret_url],
       )
       messenger.deliver
