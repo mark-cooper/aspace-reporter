@@ -29,7 +29,7 @@ module ArchivesSpace
     end
 
     def run
-      @data[:header][:date] = Time.now
+      @data[:header][:date] = Time.now.to_s
       @data[:report][:global] = gather_global_data
       @data[:report][:repository] = gather_repository_data
       @data[:checksum] = Digest::SHA2.hexdigest("#{@data[:header].to_s}#{@data[:report].to_s}")
@@ -53,10 +53,10 @@ module ArchivesSpace
 
         # get last (any non-system) user login time for a sense of activity
         d[:user_last_mtime] = dbc[:user].
-          where(is_system_user: 0).order(Sequel.desc(:user_mtime)).first[:user_mtime]
+          where(is_system_user: 0).order(Sequel.desc(:user_mtime)).first[:user_mtime].to_s
       end
 
-      JSON.generate(d)
+      d
     end
 
     def gather_repository_data
@@ -74,7 +74,7 @@ module ArchivesSpace
         end
       end
 
-      JSON.generate(d)
+      d
     end
   end
 end

@@ -43,12 +43,9 @@ ArchivesSpaceService.loaded_hook do
       Log.info "Running reporter: #{Time.now}"
       reporter.run
       payload = { type: 'report', data: reporter.data }
+      Log.info("Reporter payload: #{payload.inspect}")
 
-      if AppConfig[:aspace_reporter_debug]
-        Log.debug(payload)
-        raise 'Exiting -- debug mode only [reporter]'
-      end
-
+      raise 'Exiting -- debug mode only [reporter]' if AppConfig[:aspace_reporter_debug]
       raise 'Messenger plugin not enabled [reporter]' unless AppConfig[:plugins].include? 'aspace-messenger'
       raise 'Reporter url is not defined [reporter]' unless AppConfig[:aspace_reporter_secret_url]
 
